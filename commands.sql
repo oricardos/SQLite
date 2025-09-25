@@ -120,4 +120,122 @@ FROM
 WHERE
     "preco" > 400;
 
-SELECT * FROM compras WHERE client_id = 2;
+SELECT
+    *
+FROM
+    compras
+WHERE
+    client_id = 2;
+
+-- SEÇÃO 3 SCHEMA
+CREATE TABLE
+    produtos (
+        "id" INT,
+        "descontinuado" TINYINT,
+        "nome" VARCHAR(100),
+        "preco" DECIMAL(10, 2),
+        "descricao" TEXT,
+        "data_criacao" DATETIME
+    );
+
+INSERT INTO
+    produtos (
+        id,
+        descontinuado,
+        nome,
+        preco,
+        descricao,
+        data_criacao
+    )
+VALUES
+    (
+        1,
+        1,
+        'Tablet',
+        288.90,
+        'Tablet Xiaomi',
+        '25-09-2025'
+    );
+
+-- verificacao de tipo
+SELECT
+    id,
+    typeof(data_criacao)
+FROM
+    produtos;
+
+-- strict mode
+CREATE TABLE
+    cursos (id INTEGER, nome Text, preco INTEGER) STRICT;
+
+INSERT INTO
+    cursos (id, nome, preco)
+VALUES
+    (1, 'Televisão', 1000);
+
+DROP TABLE cursos;
+
+-- primary key (PK)
+CREATE TABLE
+    cursos (id INTEGER PRIMARY KEY, nome TEXT) STRICT;
+
+INSERT INTO
+    cursos (nome, preco)
+VALUES
+    ('API com .NET', 2000);
+
+-- Foreing Key (FK)
+PRAGMA foreign_keys;
+
+CREATE TABLE
+    aulas (
+        id INTEGER PRIMARY KEY,
+        curso_id INTEGER,
+        nome TEXT,
+        FOREIGN KEY (curso_id) REFERENCES cursos (id) ON DELETE CASCADE ON UPDATE CASCADE
+    ) STRICT;
+
+INSERT INTO
+    cursos (nome)
+VALUES
+    ('C#');
+
+INSERT INTO
+    aulas (curso_id, nome)
+VALUES
+    (1, 'Iniciando');
+
+-- restrições
+DROP TABLE usuario;
+
+CREATE TABLE
+    usuario (
+        id INTEGER PRIMARY KEY,
+        nome TEXT NOT NULL,
+        email TEXT NOT NULL COLLATE NOCASE UNIQUE,
+        tipo TEXT NOT NULL DEFAULT 'usuario' CHECK (tipo IN ('usuario', 'admin')),
+        vitalicio INTEGER DEFAULT 0 CHECK (vitalicio IN (0, 1)),
+        criado TEXT DEFAULT CURRENT_TIMESTAMP
+    ) STRICT;
+
+CREATE TABLE
+    certificados (
+        id INTEGER PRIMARY KEY,
+        usuario_id INTEGER NOT NULL,
+        curso_id INTEGER NOT NULL,
+        UNIQUE (usuario_id, curso_id)
+    ) STRICT;
+
+INSERT INTO
+    usuario (nome, email, tipo, vitalicio)
+VALUES
+    ('Ricardo', 'rsicsardoss@mail.com', 'usuario', 0);
+
+INSERT INTO
+    certificados (usuario_id, curso_id)
+VALUES
+    (1, 1);
+
+-- Default (ver tabela anterior)
+
+-- MODELAGEM DE DADOS (ver Readme)
