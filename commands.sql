@@ -248,6 +248,11 @@ CREATE TABLE
         created TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP -- NOT NULL
     ) STRICT;
 
+INSERT INTO
+    users (name, password, email)
+VALUES
+    ('Ricardo', '123456789', 'ricardo@mail.com');
+
 CREATE TABLE
     courses (
         id INTEGER PRIMARY KEY, --xNOT NULL
@@ -258,6 +263,17 @@ CREATE TABLE
         hours INTEGER NOT NULL,
         created TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
     ) STRICT;
+
+INSERT INTO
+    courses (slug, title, description, lessons, hours)
+VALUES
+    (
+        'javascript-basico',
+        'JavaScript Básico',
+        'Aprenda os fundamentos',
+        20,
+        5
+    );
 
 CREATE TABLE
     lessons (
@@ -277,23 +293,62 @@ CREATE TABLE
         UNIQUE (course_id, slug) --
     ) STRICT;
 
-CREATE TABLE lessons_completed (
-  user_id INTEGER NOT NULL,
-  course_id INTEGER NOT NULL,
-  lesson_id INTEGER NOT NULL,
-  completed TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (user_id, course_id, lesson_id),
-  FOREIGN KEY (lesson_id) REFERENCES lessons (id),
-  FOREIGN KEY (course_id) REFERENCES courses (id),
-  FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
-) STRICT;
+INSERT INTO
+    lessons (
+        course_id,
+        slug,
+        title,
+        materia,
+        materia_slug,
+        seconds,
+        video,
+        description,
+        lesson_order,
+        free
+    )
+VALUES
+    (
+        1,
+        'variaveis-let-const',
+        'Variáveis: let e const',
+        'Fundamentos',
+        'fundamentos',
+        480,
+        'variaveis.mp4',
+        'Entenda a diferença entre let, const e var',
+        1,
+        1
+    );
 
-CREATE TABLE certificates (
-  id TEXT PRIMARY KEY,
-  user_id INTEGER NOT NULL,
-  course_id INTEGER NOT NULL,
-  completed TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE (user_id, course_id),
-  FOREIGN KEY (course_id) REFERENCES courses (id),
-  FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
-) STRICT;
+CREATE TABLE
+    lessons_completed (
+        user_id INTEGER NOT NULL,
+        course_id INTEGER NOT NULL,
+        lesson_id INTEGER NOT NULL,
+        completed TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (user_id, course_id, lesson_id),
+        FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+        FOREIGN KEY (course_id) REFERENCES courses (id),
+        FOREIGN KEY (lesson_id) REFERENCES lessons (id)
+    ) STRICT;
+
+INSERT INTO
+    lessons_completed (user_id, course_id, lesson_id)
+VALUES
+    (1, 1, 1);
+
+CREATE TABLE
+    certificates (
+        id TEXT PRIMARY KEY,
+        user_id INTEGER NOT NULL,
+        course_id INTEGER NOT NULL,
+        completed TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE (user_id, course_id),
+        FOREIGN KEY (course_id) REFERENCES courses (id),
+        FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+    ) STRICT;
+
+INSERT INTO
+    certificates (id, user_id, course_id)
+VALUES
+    ('8alldDelk0', 1, 1)
