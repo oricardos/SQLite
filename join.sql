@@ -240,3 +240,15 @@ FROM lessons_completed AS lc
 JOIN users AS u ON lc.user_id = u.id
 JOIN lessons AS l  ON lc.lesson_id = l.id
 JOIN courses AS c on lc.course_id = c.id;
+
+-- LEFT JOIN --
+SELECT lc.user_id, l.title, lc.completed FROM lessons AS l
+LEFT JOIN lessons_completed AS lc
+ON lc.lesson_id = l.id AND lc.user_id = 1;
+
+-- SELF JOIN --
+SELECT a.id, a.materia, a.slug
+FROM lessons AS a 
+JOIN lessons AS b
+ON a.slug = b.slug
+WHERE a.id != b.id;
