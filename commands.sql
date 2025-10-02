@@ -930,3 +930,81 @@ FROM
     livros
 WHERE
     tamanho_nome > 15;
+
+-- ORDER BY --
+SELECT
+    *
+FROM
+    produtos
+ORDER BY
+    preco ASC;
+
+SELECT
+    *
+FROM
+    produtos
+ORDER BY
+    preco DESC;
+
+SELECT
+    *
+FROM
+    produtos
+ORDER BY
+    categoria ASC,
+    preco ASC;
+
+SELECT
+    *
+FROM
+    produtos
+ORDER BY
+    criado DESC;
+
+-- GROUP BY --
+SELECT
+    categoria,
+    COUNT(*) AS total
+FROM
+    produtos
+GROUP BY
+    categoria;
+
+SELECT
+    categoria,
+    AVG(preco) AS preco_medio
+FROM
+    produtos
+GROUP BY
+    categoria;
+
+SELECT
+    categoria,
+    COUNT(*) AS total
+FROM
+    produtos
+GROUP BY
+    categoria
+ORDER BY
+    total DESC;
+
+-- HAVING --
+SELECT
+    categoria,
+    COUNT(*) AS total
+FROM
+    produtos
+GROUP BY
+    categoria
+HAVING
+    total > 1;
+
+SELECT
+    categoria,
+    AVG(preco) AS preco_medio
+FROM
+    produtos
+GROUP BY
+    categoria
+HAVING
+    preco_medio > 70000;
