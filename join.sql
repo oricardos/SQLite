@@ -611,16 +611,9 @@ WHERE
 
 -- Exercicios --
 -- 1 --
-SELECT
-  l.title AS aula,
-  c.title AS curso,
-  l.lesson_order AS ordem_aula
-FROM
-  courses AS c
-  JOIN lessons AS l ON l.course_id = c.id
-  AND c.slug = 'html-para-iniciantes'
-ORDER BY
-  ordem_aula ASC;
+SELECT * from lessons
+WHERE course_id = (SELECT id from courses WHERE slug = 'html-para-iniciantes')
+ORDER by lesson_order ASC;
 
 -- 2 --
 SELECT
@@ -633,8 +626,40 @@ FROM
   AND c.id = 2;
 
 -- 3 --
-SELECT title, aulas, COUNT(aulas) AS total_aulas
-FROM courses
-GROUP BY
-aulas
-;
+SELECT course_id, cs.title as curso,  COUNT(*) as total_aulas
+from lessons as ls
+join courses as cs on cs.id = ls.course_id
+GROUP BY course_id;
+
+-- 4 --
+SELECT course_id, cs.title as curso,  sum(ls.seconds) as total_segundos
+from lessons as ls
+join courses as cs on cs.id = ls.course_id
+GROUP BY course_id
+ORDER BY total_segundos DESC;
+
+-- 5 --
+SELECT course_id, cs.title as curso,  sum(ls.seconds) as total_segundos
+from lessons as ls
+join courses as cs on cs.id = ls.course_id
+GROUP BY course_id
+HAVING total_segundos > 2300
+ORDER BY total_segundos DESC;
+
+-- 6 -- 
+-- mesmo do 4 --
+
+-- 7 --
+select us.name, cs.title as course, ct.completed 
+from certificates ct
+join users as us on us.id = ct.user_id
+join courses as cs on cs.id = ct.course_id
+where us.email = 'mariana@email.com';
+
+-- 8 --
+SELECT ls.title, lc.completed 
+from lessons as ls 
+left JOIN lessons_completed as lc on lc.lesson_id = ls.id
+and lc.user_id = (SELECT id from users WHERE email = 'lucas@email.com');
+
+SELECT * FROM lessons_completed;
