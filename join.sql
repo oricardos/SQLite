@@ -662,4 +662,11 @@ from lessons as ls
 left JOIN lessons_completed as lc on lc.lesson_id = ls.id
 and lc.user_id = (SELECT id from users WHERE email = 'lucas@email.com');
 
-SELECT * FROM lessons_completed;
+-- 9 --
+SELECT * from lessons 
+WHERE course_id = (SELECT course_id from lessons WHERE slug = 'funcoes-e-escopo') 
+and lesson_order in (
+  (SELECT lesson_order from lessons WHERE slug = 'funcoes-e-escopo') -1, 
+  (SELECT lesson_order from lessons WHERE slug = 'funcoes-e-escopo'), 
+  (SELECT lesson_order from lessons WHERE slug = 'funcoes-e-escopo') +1) 
+ORDER BY lesson_order;
